@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="100" height="10" tilewidth="32" tileheight="32">
+ <tileset firstgid="1" name="Forest" tilewidth="32" tileheight="32">
+  <image source="../../FreeTileset/png/BG/BG.png" width="1000" height="750"/>
+ </tileset>
+ <tileset firstgid="714" name="Platforms" tilewidth="32" tileheight="32">
+  <image source="../../FreeTileset/png/Tiles/1.png" width="128" height="128"/>
+ </tileset>
+ <tileset firstgid="730" name="Platforms2" tilewidth="32" tileheight="32">
+  <image source="../../FreeTileset/png/Tiles/3.png" width="128" height="128"/>
+ </tileset>
+ <tileset firstgid="746" name="Stone" tilewidth="32" tileheight="32">
+  <image source="../../FreeTileset/png/Object/Stone.png" width="90" height="54"/>
+ </tileset>
+ <tileset firstgid="748" name="Tree_2" tilewidth="32" tileheight="32">
+  <image source="../../FreeTileset/png/Object/Tree_2.png" width="282" height="301"/>
+ </tileset>
+ <layer name="Background" width="100" height="10">
+  <data encoding="base64" compression="zlib">
+   eJy91lXQVWUYBeDzH7q7u7tURAkTpFHCRgQFC1ARBBQQFBQkpDtMUEJBwUIFpLu7u7sbnst9zZx9ZvZzu2at773ZCyORyCIWs4SlLGM5K1jJKlazhrWsYz0b2MgmNrOFrWxjOzvYyS52s4e97GM/BzjIIQ5zhKMc4zgnOMkpTnOGa1znBje5xW3uEEnwESURiUlCUpKRnBSkJBWpSUPahPBy05GeDGQkE5nJQlaykZ0c5Ey4tzc5yznOc4GLXOIyV7ga4rsFu+ciN3nISz7yU4CCFKIwRShKMYpTgpKUojRlQswtSznKU4H7uJ8HqMiDVOIhHo7TzWO5L9i9MlWoSjUe4VEe43Ge4EmqU4OnqEktalOHutQLMbc+DXiaZ2hIIxrThGd5jud5IU43j+W+YPcXeYmXacorNONVmtOC13idlrTiDd7kLd7mHVqHmNuGtrzLe7xPOz6gPR34kI50itPNY7kv2L0zH/ExXehKNz6hOz34lM/oSS8+5wt604cv6Rtibj/6M4CvGMggBjOEoQxjOCPidPNY7gt2H8koRjOGsYxjPBP4mm/4lu/4nh+YyCR+5Ccmh5g7halM42d+YToz+JXfmMksfo/TzWO5L9j9D/7kL/5mNv/wL/8xh7nM43/ms4CFLGIxS1gaYu4ylrOClaxiNWtYyzrWs4GNcbp5LPcFu29iM1vYyja2s4Od7GI3e9jLPvZzgIMc4jBHQsw9yjGOc4KTnOI0ZzjLOc5zIU43j+W+YPeLXOIyV7jKNa5zg5vc4jZ3iET9ZxMlEYlJQtJoeLnJSE4KUpKK1KQhLelITwYyRuNz81juC3bPRGaykJVsZCcHOclFbvKQl3zkpwAFKURhioSYW5RiFKcEJSlFacpQlnKUpwJ3AVW88Fo=
+  </data>
+ </layer>
+ <layer name="Platforms" width="100" height="10">
+  <data encoding="base64" compression="zlib">
+   eJztlbcOwkAQRC0TC1IHHXTQwf9/AjnnnOlJBelZyJJFdbbOvgKf9KQpTrvjm9Va0/yj6px1TbvAFW5w11U7+u/z4P2f8IK3kUVArZ8yHiowhZmC2TD7V6EGY5h46CfI+4cgDBGIKs6jzjc3YAkrBXmY/ZvQgjksPPQT4/3jkIAkpATzkD1HXs3lbx+72m1f1tppssgI5iF7jryay98+drXbvqy1s2SRE8yjzf0OdKEHa9jAFnYOfMquJ9rHrnbbl7V2niwKgnn0uT+AIYxgDwc4wsmBT9n1RPvY1W77stYukkUp8N1lTverr+Vq4z9i7DKn+9XXcrXxH/kALfhMxw==
+  </data>
+ </layer>
+</map>

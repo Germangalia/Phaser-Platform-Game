@@ -13,15 +13,17 @@
 
 
         preload: function() {
-            game.load.image('sky', 'assets/sky.png');
-            game.load.image('ground', 'assets/platform.png');
-            game.load.image('star', 'assets/star.png');
-            game.load.spritesheet('dude', 'assets/dude.png', 32, 48);
+            this.game.load.image('sky', 'assets/sky.png');
+            this.game.load.image('ground', 'assets/platform.png');
+            this.game.load.image('star', 'assets/star.png');
+            this.game.load.spritesheet('dude', 'assets/dude.png', 32, 48);
 
-            game.load.audio('dead', ['assets/dead.wav', 'assets/dead.mp3']);
-            game.load.audio('dust', ['assets/dust.wav', 'assets/dust.mp3']);
-            game.load.audio('jump', ['assets/jump.wav', 'assets/jump.mp3']);
-            game.load.audio('coin', ['assets/coin.wav', 'assets/coin.mp3']);
+            this.game.load.tilemap('tilemap', 'assets/forest.json', null, Phaser.Tilemap.TILED_JSON);
+
+            this.game.load.audio('dead', ['assets/dead.wav', 'assets/dead.mp3']);
+            this.game.load.audio('dust', ['assets/dust.wav', 'assets/dust.mp3']);
+            this.game.load.audio('jump', ['assets/jump.wav', 'assets/jump.mp3']);
+            this.game.load.audio('coin', ['assets/coin.wav', 'assets/coin.mp3']);
 
             this.player;
             this.platforms;
@@ -33,19 +35,20 @@
 
         create: function() {
             //Added physics
-            game.physics.startSystem(Phaser.Physics.ARCADE);
+            this.game.physics.startSystem(Phaser.Physics.ARCADE);
             //Added background
-            game.add.sprite(0, 0, 'sky');
+            this.game.add.sprite(0, 0, 'sky');
+            this.map = this.game.add.tilemap('tilemap');
+            this.map.addTilesetImage('forest', 'tiles');
             //Added sounds
-            game.sound.mute = true;
-            this.deadSound = game.add.audio('dead', 0.1);
-            this.jumpSound = game.add.audio('jump', 0.1);
-            this.dustSound = game.add.audio('dust', 0.1);
-            this.coinSound = game.add.audio('coin', 0.1);
+            this.deadSound = this.game.add.audio('dead', 0.1);
+            this.jumpSound = this.game.add.audio('jump', 0.1);
+            this.dustSound = this.game.add.audio('dust', 0.1);
+            this.coinSound = this.game.add.audio('coin', 0.1);
             //Added platforms
-            this.platforms = game.add.group();
+            this.platforms = this.game.add.group();
             this.platforms.enableBody = true;
-            this.ground = this.platforms.create(0, game.world.height - 64, 'ground');
+            this.ground = this.platforms.create(0, this.game.world.height - 64, 'ground');
             this.ground.scale.setTo(2, 2);
             this.ground.body.immovable = true;
             this.ledge = this.platforms.create(400, 400, 'ground');
@@ -53,8 +56,8 @@
             this.ledge = this.platforms.create(-150, 250, 'ground');
             this.ledge.body.immovable = true;
             //Added player and enable pysics
-            this.player = game.add.sprite(1, game.world.height - 450, 'dude');
-            game.physics.arcade.enable(this.player);
+            this.player = game.add.sprite(1, this.game.world.height - 450, 'dude');
+            this.game.physics.arcade.enable(this.player);
             //  Player physics properties. Give the little guy a slight bounce.
             this.player.body.bounce.y = 0.2;
             this.player.body.gravity.y = 300;
@@ -63,7 +66,7 @@
             this.player.animations.add('left', [0, 1, 2, 3], 10, true);
             this.player.animations.add('right', [5, 6, 7, 8], 10, true);
             //  Finally some stars to collect
-            this.stars = game.add.group();
+            this.stars = this.game.add.group();
             //  We will enable physics for any star that is created in this group
             this.stars.enableBody = true;
             for (var i = 0; i < 12; i++)
@@ -76,35 +79,32 @@
                 star.body.bounce.y = 0.7 + Math.random() * 0.2;
             }
             //  The score
-            this.scoreText = game.add.text(16, 16, 'score: 0', { fontSize: '32px', fill: '#000' });
+            this.scoreText = this.game.add.text(16, 16, 'score: 0', { fontSize: '32px', fill: '#000' });
             //  Our controls.
-            this.cursors = game.input.keyboard.createCursorKeys();
+            this.cursors = this.game.input.keyboard.createCursorKeys();
         },
 
         update: function() {
-            game.physics.arcade.collide(this.player, this.platforms);
-            game.physics.arcade.collide(this.stars, this.platforms);
+            this.game.physics.arcade.collide(this.player, this.platforms);
+            this.game.physics.arcade.collide(this.stars, this.platforms);
             //  Checks to see if the player overlaps with any of the stars, if he does call the collectStar function
-            game.physics.arcade.overlap(this.player, this.stars, this.collectStar, null, this);
+            this.game.physics.arcade.overlap(this.player, this.stars, this.collectStar, null, this);
             //  Reset the players velocity (movement)
             this.player.body.velocity.x = 0;
             if (this.cursors.left.isDown)
             {
-                game.sound.mute = false;
                 //  Move to the left
                 this.player.body.velocity.x = -150;
                 this.player.animations.play('left');
             }
             else if (this.cursors.right.isDown)
             {
-                game.sound.mute = false;
                 //  Move to the right
                 this.player.body.velocity.x = 150;
                 this.player.animations.play('right');
             }
             else
             {
-                game.sound.mute = false;
                 //  Stand still
                 this.player.animations.stop();
                 this.player.frame = 4;
@@ -112,7 +112,6 @@
             //  Allow the player to jump if they are touching the ground.
             if (this.cursors.up.isDown && this.player.body.touching.down)
             {
-                game.sound.mute = false;
                 this.jumpSound.play();
                 this.player.body.velocity.y = -350;
             }
@@ -120,7 +119,6 @@
         },
 
         inputs: function() {
-            game.sound.mute = false;
         },
 
         collectStar: function (player, star) {
