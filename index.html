@@ -18,10 +18,11 @@
             game.load.image('star', 'assets/star.png');
             game.load.spritesheet('dude', 'assets/dude.png', 32, 48);
 
-//            game.load.audio('dead', ['assets/dead.wav', 'assets/dead.mp3']);
-//            game.load.audio('dust', ['assets/dust.wav', 'assets/dust.mp3']);
-//            game.load.audio('jump', ['assets/jump.wav', 'assets/jump.mp3']);
-//            game.load.audio('coin', ['assets/coin.wav', 'assets/coin.mp3']);
+            game.load.audio('dead', ['assets/dead.wav', 'assets/dead.mp3']);
+            game.load.audio('dust', ['assets/dust.wav', 'assets/dust.mp3']);
+            game.load.audio('jump', ['assets/jump.wav', 'assets/jump.mp3']);
+            game.load.audio('coin', ['assets/coin.wav', 'assets/coin.mp3']);
+
             this.player;
             this.platforms;
             this.cursors;
@@ -35,6 +36,12 @@
             game.physics.startSystem(Phaser.Physics.ARCADE);
             //Added background
             game.add.sprite(0, 0, 'sky');
+            //Added sounds
+            game.sound.mute = true;
+            this.deadSound = game.add.audio('dead', 0.1);
+            this.jumpSound = game.add.audio('jump', 0.1);
+            this.dustSound = game.add.audio('dust', 0.1);
+            this.coinSound = game.add.audio('coin', 0.1);
             //Added platforms
             this.platforms = game.add.group();
             this.platforms.enableBody = true;
@@ -83,18 +90,21 @@
             this.player.body.velocity.x = 0;
             if (this.cursors.left.isDown)
             {
+                game.sound.mute = false;
                 //  Move to the left
                 this.player.body.velocity.x = -150;
                 this.player.animations.play('left');
             }
             else if (this.cursors.right.isDown)
             {
+                game.sound.mute = false;
                 //  Move to the right
                 this.player.body.velocity.x = 150;
                 this.player.animations.play('right');
             }
             else
             {
+                game.sound.mute = false;
                 //  Stand still
                 this.player.animations.stop();
                 this.player.frame = 4;
@@ -102,17 +112,20 @@
             //  Allow the player to jump if they are touching the ground.
             if (this.cursors.up.isDown && this.player.body.touching.down)
             {
+                game.sound.mute = false;
+                this.jumpSound.play();
                 this.player.body.velocity.y = -350;
             }
             this.inputs();
         },
 
         inputs: function() {
-            //input here
+            game.sound.mute = false;
         },
 
         collectStar: function (player, star) {
         // Removes the star from the screen
+            this.coinSound.play();
             star.kill();
         //  Add and update the score
             this.score += 10;
