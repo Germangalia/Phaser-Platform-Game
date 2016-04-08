@@ -40,6 +40,7 @@
             this.game.load.audio('dust', ['assets/dust.wav', 'assets/dust.mp3']);
             this.game.load.audio('jump', ['assets/jump.wav', 'assets/jump.mp3']);
             this.game.load.audio('coin', ['assets/coin.wav', 'assets/coin.mp3']);
+            this.game.load.audio('music', ['assets/musicgame.mp3']);
 
             this.player;
             this.platforms;
@@ -69,11 +70,14 @@
             this.backgroundLayer.resizeWorld();
 
             //Added sounds
-            this.game.sound.mute = true;
+            //this.game.sound.mute = true;
+            this.music = this.game.add.audio('music', 0.5);
+            this.music.play();
             this.deadSound = this.game.add.audio('dead', 0.1);
             this.jumpSound = this.game.add.audio('jump', 0.1);
             this.dustSound = this.game.add.audio('dust', 0.1);
             this.coinSound = this.game.add.audio('coin', 0.1);
+
 
             //Added player and enable pysics
             this.player = game.add.sprite(1, this.game.world.height - 450, 'dude');
@@ -89,26 +93,37 @@
             //  Our two animations, walking left and right.
             this.player.animations.add('left', [0, 1, 2, 3], 10, true);
             this.player.animations.add('right', [5, 6, 7, 8], 10, true);
-            //  Finally some stars to collect
-            this.stars = this.game.add.group();
-            //  We will enable physics for any star that is created in this group
-            this.stars.enableBody = true;
-            for (var i = 0; i < 12; i++)
-            {
-                //  Create a star inside of the 'stars' group
-                var star = this.stars.create(i * 70, 0, 'star');
-                //  Let gravity do its thing
-                star.body.gravity.y = 300;
-                //  This just gives each star a slightly random bounce value
-                star.body.bounce.y = 0.7 + Math.random() * 0.2;
-            }
+
+
+            //Added stars
+            this.addStars();
+
+//            //  Finally some stars to collect
+//            this.stars = this.game.add.group();
+//            //  We will enable physics for any star that is created in this group
+//            this.stars.enableBody = true;
+//            for (var i = 0; i < 12; i++)
+//            {
+//                //  Create a star inside of the 'stars' group
+//                var star = this.stars.create(i * 70, 0, 'star');
+//                //  Let gravity do its thing
+//                star.body.gravity.y = 300;
+//                //  This just gives each star a slightly random bounce value
+//                star.body.bounce.y = 0.7 + Math.random() * 0.2;
+//            }
+
+
             //  The score
             this.scoreText = this.game.add.text(16, 16, 'score: 0', { fontSize: '32px', fill: '#000' });
+            this.scoreText.fixedToCamera = true;
+
+
             //  Our controls.
             this.cursors = this.game.input.keyboard.createCursorKeys();
         },
 
         update: function() {
+
             this.game.physics.arcade.collide(this.player, this.platformsLayer);
             this.game.physics.arcade.collide(this.stars, this.platformsLayer);
             //  Checks to see if the player overlaps with any of the stars, if he does call the collectStar function
@@ -134,11 +149,15 @@
                 this.player.frame = 4;
             }
             //  Allow the player to jump if they are touching the ground.
-            if (this.cursors.up.isDown)
+            if (this.cursors.up.isDown )
             {
+                this.game.sound.mute = false;
+                //Only jamp in floor
+                if (this.player.body.onFloor()){
+                    this.player.body.velocity.y = -350;
+                    this.jumpSound.play();
+                }
 
-                this.player.body.velocity.y = -350;
-                //this.jumpSound.play();
             }
             this.inputs();
         },
@@ -146,11 +165,34 @@
         inputs: function() {
         },
 
+        addStars: function(){
+            this.stars = this.game.add.group();
+            //  We will enable physics for any star that is created in this group
+            this.stars.enableBody = true;
+            this.starsNum = 30
+            for (var i = 0; i < this.starsNum; i++)
+            {
+                //  Create a star inside of the 'stars' group
+                this.star = this.stars.create(i * 200, 0, 'star');
+                //  Let gravity do its thing
+                this.star.body.gravity.y = 100;
+                //  This just gives each star a slightly random bounce value
+                this.star.body.bounce.y = 0.7 + Math.random() * 0.2;
+            }
+        },
+
         collectStar: function (player, star) {
             this.game.sound.mute = false;
-        // Removes the star from the screen
-            star.kill();
-        //  Add and update the score
+//        // Removes the star from the screen
+//            star.kill();
+            // Removes the star from the screen with tween
+            this.game.sound.mute = false;
+            star.body.enable = false;
+            game.add.tween(star.scale).to({x:0}, 150).start();
+            game.add.tween(star).to({y:150}, 150).start();
+            this.coinSound.play();
+
+            //  Add and update the score
             this.score += 10;
             this.scoreText.text = 'Score: ' + this.score;
             this.coinSound.play();
