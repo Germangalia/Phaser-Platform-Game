@@ -29,6 +29,12 @@
             this.game.load.image('tiles', 'assets/forest.png');
             this.game.load.spritesheet('dude', 'assets/dude.png', 32, 48);
 
+            this.game.load.spritesheet('enemy', 'assets/baddie.png', 32, 48);
+
+            this.game.load.image('live', 'assets/firstaid.png');
+
+            game.load.image('bullet', 'assets/shoot.png');
+
             this.game.load.tilemap('tilemap', 'assets/forest.json', null, Phaser.Tilemap.TILED_JSON);
             this.game.load.image('Forest', 'assets/FreeTileset/png/BG/BG.png');
             this.game.load.image('Platforms', 'assets/FreeTileset/png/Tiles/1.png');
@@ -43,11 +49,24 @@
             this.game.load.audio('music', ['assets/musicgame.mp3']);
 
             this.player;
+            this.enemy;
             this.platforms;
             this.cursors;
             this.stars;
             this.score = 0;
             this.scoreText;
+
+            this.max = 0;
+            this.front_emitter;
+            this.mid_emitter;
+            this.back_emitter;
+            this.update_interval = 4 * 60;
+            this.i = 0;
+
+            this.bullets;
+
+            this.fireRate = 100;
+            this.nextFire = 0;
         },
 
         create: function() {
@@ -78,7 +97,6 @@
             this.dustSound = this.game.add.audio('dust', 0.1);
             this.coinSound = this.game.add.audio('coin', 0.1);
 
-
             //Added player and enable pysics
             this.player = game.add.sprite(1, this.game.world.height - 450, 'dude');
             this.game.physics.arcade.enable(this.player);
@@ -98,25 +116,15 @@
             //Added stars
             this.addStars();
 
-//            //  Finally some stars to collect
-//            this.stars = this.game.add.group();
-//            //  We will enable physics for any star that is created in this group
-//            this.stars.enableBody = true;
-//            for (var i = 0; i < 12; i++)
-//            {
-//                //  Create a star inside of the 'stars' group
-//                var star = this.stars.create(i * 70, 0, 'star');
-//                //  Let gravity do its thing
-//                star.body.gravity.y = 300;
-//                //  This just gives each star a slightly random bounce value
-//                star.body.bounce.y = 0.7 + Math.random() * 0.2;
-//            }
+            //Print lives score
+            this.addLives();
 
+            //Player shoot
+            this.createBullets();
 
             //  The score
             this.scoreText = this.game.add.text(16, 16, 'score: 0', { fontSize: '32px', fill: '#000' });
             this.scoreText.fixedToCamera = true;
-
 
             //  Our controls.
             this.cursors = this.game.input.keyboard.createCursorKeys();
@@ -159,6 +167,12 @@
                 }
 
             }
+            //Shoot a player weapon
+            if (game.input.activePointer.isDown)
+            {
+                this.fire();
+            }
+
             this.inputs();
         },
 
@@ -169,7 +183,7 @@
             this.stars = this.game.add.group();
             //  We will enable physics for any star that is created in this group
             this.stars.enableBody = true;
-            this.starsNum = 30
+            this.starsNum = 30;
             for (var i = 0; i < this.starsNum; i++)
             {
                 //  Create a star inside of the 'stars' group
@@ -181,10 +195,9 @@
             }
         },
 
+
         collectStar: function (player, star) {
             this.game.sound.mute = false;
-//        // Removes the star from the screen
-//            star.kill();
             // Removes the star from the screen with tween
             this.game.sound.mute = false;
             star.body.enable = false;
@@ -196,7 +209,47 @@
             this.score += 10;
             this.scoreText.text = 'Score: ' + this.score;
             this.coinSound.play();
+        },
+
+        addLives: function(){
+            this.playerDead = false;
+            this.lives = 3;
+            this.remainingLives = game.add.group();
+            this.livesText = this.game.add.text(16, 60, 'Lives : ', { font: '34px', fill: '#fff' });
+            this.firstAidNum = 3;
+            for (var i = 0; i < this.firstAidNum; i++)
+            {
+                this.firstaid = this.remainingLives.create(35 + (50 * i), 70, 'live');
+                this.firstaid.anchor.setTo(0.5, 0.5);
+                this.firstaid.alpha = 0.4;
+            }
+            this.livesText.fixedToCamera = true;
+            this.remainingLives.fixedToCamera = true;
+        },
+
+        createBullets: function(){
+            this.bullets = game.add.group();
+            this.bullets.enableBody = true;
+            this.bullets.physicsBodyType = Phaser.Physics.ARCADE;
+
+            this.bullets.createMultiple(50, 'bullet');
+//            this.bullets.setAll('checkWorldBounds', true);
+//            this.bullets.setAll('outOfBoundsKill', true);
+        },
+
+        fire: function(){
+            if (game.time.now > this.nextFire && this.bullets.countDead() > 0)
+            {
+                this.nextFire = game.time.now + this.fireRate;
+
+                this.bullet = this.bullets.getFirstDead();
+
+                this.bullet.reset(this.player.x + 10, this.player.y + 30 );
+
+                game.physics.arcade.moveToPointer(this.bullet, 300);
+            }
         }
+
     };
 
     var game = new Phaser.Game(1000, 320, Phaser.AUTO, '');
