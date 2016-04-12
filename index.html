@@ -30,10 +30,13 @@
             this.game.load.spritesheet('dude', 'assets/dude.png', 32, 48);
 
             this.game.load.spritesheet('enemy', 'assets/baddie.png', 32, 48);
+            game.load.spritesheet('explosio', 'assets/explosion.png', 128, 128);
 
-            this.game.load.image('live', 'assets/firstaid.png');
+            this.game.load.image('live', 'assets/diamond.png');
 
             game.load.image('bullet', 'assets/shoot.png');
+            game.load.image("enemy","assets/asteroid2.png");
+            game.load.image('rain', 'assets/blue_ball.png');
 
             this.game.load.tilemap('tilemap', 'assets/forest.json', null, Phaser.Tilemap.TILED_JSON);
             this.game.load.image('Forest', 'assets/FreeTileset/png/BG/BG.png');
@@ -72,55 +75,33 @@
         create: function() {
             //Added physics
             this.game.physics.startSystem(Phaser.Physics.ARCADE);
-            //Added background and platforms
-            //this.game.add.sprite(0, 0, 'sky');
-            this.map = this.game.add.tilemap('tilemap');
-            this.map.addTilesetImage('Forest');
-            this.map.addTilesetImage('Platforms');
-            this.map.addTilesetImage('Platforms2');
-            this.map.addTilesetImage('Stone');
-            this.map.addTilesetImage('Tree_2');
-            //Add Layers for platforms and background
-            this.backgroundLayer = this.map.createLayer('Background');
-            this.platformsLayer = this.map.createLayer('Platforms');
-            //Add collision to platforms
-            this.map.setCollisionBetween(1, 2000, true, 'Platforms');
-            //Change map size
-            this.backgroundLayer.resizeWorld();
 
-            //Added sounds
-            //this.game.sound.mute = true;
-            this.music = this.game.add.audio('music', 0.5);
-            this.music.play();
-            this.deadSound = this.game.add.audio('dead', 0.1);
-            this.jumpSound = this.game.add.audio('jump', 0.1);
-            this.dustSound = this.game.add.audio('dust', 0.1);
-            this.coinSound = this.game.add.audio('coin', 0.1);
+            //Add map
+            this.addMap();
 
-            //Added player and enable pysics
-            this.player = game.add.sprite(1, this.game.world.height - 450, 'dude');
-            this.game.physics.arcade.enable(this.player);
+            //Add sound
+            this.addSound();
 
-            //Camera
-            this.game.camera.follow(this.player);
-
-            //  Player physics properties. Give the little guy a slight bounce.
-            this.player.body.bounce.y = 0.2;
-            this.player.body.gravity.y = 300;
-            this.player.body.collideWorldBounds = true;
-            //  Our two animations, walking left and right.
-            this.player.animations.add('left', [0, 1, 2, 3], 10, true);
-            this.player.animations.add('right', [5, 6, 7, 8], 10, true);
-
+            //Add player
+            this.addPlayer();
 
             //Added stars
             this.addStars();
+
+            //Add rain
+            this.addRain();
+
+            //add explosion
+            this.addExplosion();
 
             //Print lives score
             this.addLives();
 
             //Player shoot
             this.createBullets();
+
+            //Add enemy
+            this.addEnemy();
 
             //  The score
             this.scoreText = this.game.add.text(16, 16, 'score: 0', { fontSize: '32px', fill: '#000' });
@@ -136,6 +117,8 @@
             this.game.physics.arcade.collide(this.stars, this.platformsLayer);
             //  Checks to see if the player overlaps with any of the stars, if he does call the collectStar function
             this.game.physics.arcade.overlap(this.player, this.stars, this.collectStar, null, this);
+            this.game.physics.arcade.overlap(this.player, this.enemy, this.deadPlayer, null, this);
+            this.game.physics.arcade.overlap(this.bullets, this.enemy, this.deadEnemy, null, this);
             //  Reset the players velocity (movement)
             this.player.body.velocity.x = 0;
             if (this.cursors.left.isDown)
@@ -173,10 +156,60 @@
                 this.fire();
             }
 
+            //Move enemys
+            this.enemyMove();
+
+
             this.inputs();
         },
 
         inputs: function() {
+        },
+
+        addMap: function(){
+            //Added background and platforms
+            //this.game.add.sprite(0, 0, 'sky');
+            this.map = this.game.add.tilemap('tilemap');
+            this.map.addTilesetImage('Forest');
+            this.map.addTilesetImage('Platforms');
+            this.map.addTilesetImage('Platforms2');
+            this.map.addTilesetImage('Stone');
+            this.map.addTilesetImage('Tree_2');
+            //Add Layers for platforms and background
+            this.backgroundLayer = this.map.createLayer('Background');
+            this.platformsLayer = this.map.createLayer('Platforms');
+            //Add collision to platforms
+            this.map.setCollisionBetween(1, 2000, true, 'Platforms');
+            //Change map size
+            this.backgroundLayer.resizeWorld();
+        },
+
+        addSound: function(){
+            //Added sounds
+            //this.game.sound.mute = true;
+            this.music = this.game.add.audio('music', 0.5);
+            this.music.play();
+            this.deadSound = this.game.add.audio('dead', 0.1);
+            this.jumpSound = this.game.add.audio('jump', 0.1);
+            this.dustSound = this.game.add.audio('dust', 0.1);
+            this.coinSound = this.game.add.audio('coin', 0.1);
+        },
+
+        addPlayer: function(){
+            //Added player and enable pysics
+            this.player = game.add.sprite(1, this.game.world.height - 450, 'dude');
+            this.game.physics.arcade.enable(this.player);
+
+            //Camera
+            this.game.camera.follow(this.player);
+
+            //  Player physics properties. Give the little guy a slight bounce.
+            this.player.body.bounce.y = 0.2;
+            this.player.body.gravity.y = 300;
+            this.player.body.collideWorldBounds = true;
+            //  Our two animations, walking left and right.
+            this.player.animations.add('left', [0, 1, 2, 3], 10, true);
+            this.player.animations.add('right', [5, 6, 7, 8], 10, true);
         },
 
         addStars: function(){
@@ -195,7 +228,6 @@
             }
         },
 
-
         collectStar: function (player, star) {
             this.game.sound.mute = false;
             // Removes the star from the screen with tween
@@ -209,22 +241,59 @@
             this.score += 10;
             this.scoreText.text = 'Score: ' + this.score;
             this.coinSound.play();
+            console.log(this.player.body.x)
+        },
+
+        reset: function(){
+            this.player.scale.setTo(0, 0);
+            this.game.add.tween(this.player.scale).to({x:1, y:1}, 300).start();
+            this.player.reset(1, this.game.world.height -195);
+
+            this.score = 0;
+            this.scoreText.text = 'Score: 0';
+
+            this.enemy.removeAll();
+            this.addEnemy();
+
+            this.stars.removeAll();
+            this.addStars();
         },
 
         addLives: function(){
             this.playerDead = false;
             this.lives = 3;
             this.remainingLives = game.add.group();
-            this.livesText = this.game.add.text(16, 60, 'Lives : ', { font: '34px', fill: '#fff' });
-            this.firstAidNum = 3;
-            for (var i = 0; i < this.firstAidNum; i++)
+            this.livesText = this.game.add.text(16, 60, '', { font: '34px Arial', fill: '' });
+            for (var i = 0; i < 3; i++)
             {
-                this.firstaid = this.remainingLives.create(35 + (50 * i), 70, 'live');
+                this.firstaid = this.remainingLives.create(50 + (30 * i), 80, 'live');
                 this.firstaid.anchor.setTo(0.5, 0.5);
                 this.firstaid.alpha = 0.4;
             }
+
             this.livesText.fixedToCamera = true;
             this.remainingLives.fixedToCamera = true;
+        },
+
+        deadPlayer: function (){
+
+//            this.exp.x = this.player.x;
+//            this.exp.y = this.player.y+10;
+//            this.exp.start(true, 500, null, 20);
+//            this.shakeEffect(this.enemy);
+            this.deadSound.play();
+            this.lives--;
+            this.remainingLives.removeChildAt(this.lives);
+            if (this.lives == 0){
+                this.playerDead = true;
+            }
+            if (this.playerDead) {
+                this.music.stop();
+                //this.game.state.start('Game_Over');
+
+            } else {
+                this.reset();
+            }
         },
 
         createBullets: function(){
@@ -233,8 +302,70 @@
             this.bullets.physicsBodyType = Phaser.Physics.ARCADE;
 
             this.bullets.createMultiple(50, 'bullet');
-//            this.bullets.setAll('checkWorldBounds', true);
-//            this.bullets.setAll('outOfBoundsKill', true);
+        },
+
+        addRain: function(){
+            this.emitter = game.add.emitter(game.world.centerX, 0, 500);
+            this.emitter.enableBody = true;
+            this.emitter.width = game.world.width;
+            //this.emitter.angle = 30; // uncomment to set an angle for the rain.
+            this.emitter.makeParticles('rain');
+            this.emitter.minParticleScale = 0.1;
+            this.emitter.maxParticleScale = 0.3;
+            this.emitter.setYSpeed(300, 500);
+            this.emitter.setXSpeed(-5, 5);
+            this.emitter.minRotation = 0;
+            this.emitter.maxRotation = 0;
+            this.emitter.start(false, 1600, 5, 0);
+        },
+
+        addEnemy: function (){
+
+            this.enemy = this.game.add.group();
+            this.enemy.enableBody = true;
+
+            this.enemy1 = this.enemy.create(535, 50, 'enemy');
+            this.enemy2 = this.enemy.create(1800, 50, 'enemy');
+
+//            this.enemy1.body.gravity.y = 300;
+            this.enemy1.body.velocity.x = 80;
+//            this.enemy2.body.gravity.y = 300;
+            this.enemy2.body.velocity.x = 80;
+
+        },
+
+        enemyMove: function(){
+            if (parseInt(this.enemy1.body.x) > 470 ) { this.enemy1.body.velocity.x = -80; }
+            if (parseInt(this.enemy1.body.x) < 320 ) { this.enemy1.body.velocity.x = 80; }
+            if (parseInt(this.enemy2.body.x) > 1960 ) { this.enemy2.body.velocity.x = -80; }
+            if (parseInt(this.enemy2.body.x) < 1770 ) { this.enemy2.body.velocity.x = 80; }
+        },
+
+        addExplosion: function(){
+            /* Crea conjunt d'explosions  */
+            this.explosions = game.add.group();
+            this.explosions.createMultiple(12, 'explosio');
+            this.explosions.setAll('anchor.x', 0.5);
+            this.explosions.setAll('anchor.y', 0.5);
+            this.explosions.forEach(function () {
+                //this.explosions.animations.add('explosio');
+            }, this);
+        },
+
+        updateExplosion: function(){
+            /*  Revisa les colisions entre el grup de bales i el grup d'asteroides*/
+            game.physics.arcade.overlap(this.bullets, this.emitter, function () {
+                /*  Amaga la bala i l'asteroide*/
+                this.bullet.kill();
+                this.emitter.kill();
+                /*  Crea una explosió*/
+                this.explosio = this.explosions.getFirstExists(false);
+                this.reset(this.emitter.body.x, this.emitter.body.y);
+                this.play('explosio', 30, false, true);
+                this.kill;
+                /*  Suma punts*/
+                //this.punts += 10;
+            }, null, this);
         },
 
         fire: function(){
@@ -248,6 +379,31 @@
 
                 game.physics.arcade.moveToPointer(this.bullet, 300);
             }
+        },
+
+        deadEnemy: function(bullet, enemy){
+
+            this.deadSound.play();
+
+            //  When a bullet hits an alien we kill them both
+            bullet.kill();
+            enemy.kill();
+
+            this.explosion = this.explosions.getFirstExists(false);
+            this.explosion.reset(enemy.body.x, enemy.body.y);
+            this.explosion.play('explosio', 10, false, true);
+        },
+
+        addExplosion: function(){
+            this.explosions = this.game.add.group();
+            this.explosions.createMultiple(30, 'explosio');
+            this.explosions.forEach(this.createExplosion, this);
+        },
+
+        createExplosion: function(explosion) {
+            explosion.anchor.x = 0.5;
+            explosion.anchor.y = 0.5;
+            explosion.animations.add('explosio');
         }
 
     };
