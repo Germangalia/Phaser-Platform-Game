@@ -243,7 +243,7 @@ var level1 = {
         this.score += 10;
         this.scoreText.text = 'Score: ' + this.score;
         this.coinSound.play();
-        console.log(this.player.body.x)
+        //console.log(this.player.body.x)
     },
 
     reset: function(){
