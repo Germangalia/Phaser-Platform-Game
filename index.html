@@ -167,6 +167,11 @@
 
 
             this.inputs();
+
+            if ( this.player.position.x > 3000){
+                this.music.stop();
+                //this.game.state.start('Level2');
+            }
         },
 
         inputs: function() {
