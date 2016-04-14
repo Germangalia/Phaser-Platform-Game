@@ -141,6 +141,9 @@ var level1 = {
         //Move enemys
         this.enemyMove();
 
+        //Mobile controls
+        this.selectMobileControls();
+
 
         this.inputs();
 
