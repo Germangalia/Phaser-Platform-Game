@@ -12,8 +12,8 @@ var level2 = {
 
         game.load.image('fire', 'assets/fire.png');
         game.load.image("jump","assets/jump.png");
-        game.load.image('right', 'assets/right.png');
-        game.load.image('left', 'assets/left.png');
+        game.load.image('bottonright', 'assets/right.png');
+        game.load.image('bottonleft', 'assets/left.png');
 
         game.load.image('bullet', 'assets/shoot.png');
         game.load.image("enemy","assets/asteroid2.png");
@@ -137,7 +137,7 @@ var level2 = {
 
         }
         //Shoot a player weapon
-        if (game.input.activePointer.isDown)
+        if (game.input.activePointer.isDown && game.input.activePointer.y < 250)
         {
             this.fire();
         }
@@ -431,40 +431,40 @@ var level2 = {
 
     selectMobileControls: function(g) {
         //Detect mobile device
-        if (!game.device.desktop){
-            this.jumpButton = game.add.sprite(430, 250, 'jump');
-            this.jumpButton.fixedToCamera = true;
-            this.jumpButton.inputEnabled = true;
-            this.jumpButton.events.onInputDown.add(this.jump, this);
-            this.jumpButton.alpha = 0.5;
+        //if (!game.device.desktop){
+        this.jumpButton = game.add.sprite(800, 255, 'jump');
+        this.jumpButton.fixedToCamera = true;
+        this.jumpButton.inputEnabled = true;
+        this.jumpButton.events.onInputDown.add(this.jump, this);
+        this.jumpButton.alpha = 0.5;
 
-            this.shootButton = game.add.sprite(730, 250, 'fire');
-            this.shootButton.fixedToCamera = true;
-            this.shootButton.inputEnabled = true;
-            this.shootButton.events.onInputDown.add(this.fire, this);
-            this.shootButton.alpha = 0.5;
+        this.shootButton = game.add.sprite(900, 255, 'fire');
+        this.shootButton.fixedToCamera = true;
+        this.shootButton.inputEnabled = true;
+        this.shootButton.events.onInputDown.add(this.fire, this);
+        this.shootButton.alpha = 0.5;
 
-            this.moveLeft = false;
-            this.moveRight = false;
+        this.moveLeft = false;
+        this.moveRight = false;
 
-            this.leftButton = game.add.sprite(10, 250, 'left');
-            this.leftButton.fixedToCamera = true;
-            this.leftButton.inputEnabled = true;
-            this.leftButton.events.onInputOver.add(function(){this.moveLeft=true;}, this);
-            this.leftButton.events.onInputOut.add(function(){this.moveLeft=false;}, this);
-            this.leftButton.events.onInputDown.add(function(){this.moveLeft=true;}, this);
-            this.leftButton.events.onInputUp.add(function(){this.moveLeft=false;}, this);
-            this.leftButton.alpha = 0.5;
+        this.leftButton = game.add.sprite(10, 255, 'bottonleft');
+        this.leftButton.fixedToCamera = true;
+        this.leftButton.inputEnabled = true;
+        this.leftButton.events.onInputOver.add(function(){this.moveLeft=true;}, this);
+        this.leftButton.events.onInputOut.add(function(){this.moveLeft=false;}, this);
+        this.leftButton.events.onInputDown.add(function(){this.moveLeft=true;}, this);
+        this.leftButton.events.onInputUp.add(function(){this.moveLeft=false;}, this);
+        this.leftButton.alpha = 0.5;
 
-            this.rightButton = game.add.sprite(110, 250, 'right');
-            this.rightButton.fixedToCamera = true;
-            this.rightButton.inputEnabled = true;
-            this.rightButton.events.onInputOver.add(function(){this.moveRight=true;}, this);
-            this.rightButton.events.onInputOut.add(function(){this.moveRight=false;}, this);
-            this.rightButton.events.onInputDown.add(function(){this.moveRight=true;}, this);
-            this.rightButton.events.onInputUp.add(function(){this.moveRight=false;}, this);
-            this.rightButton.alpha = 0.5;
-        }
+        this.rightButton = game.add.sprite(110, 255, 'bottonright');
+        this.rightButton.fixedToCamera = true;
+        this.rightButton.inputEnabled = true;
+        this.rightButton.events.onInputOver.add(function(){this.moveRight=true;}, this);
+        this.rightButton.events.onInputOut.add(function(){this.moveRight=false;}, this);
+        this.rightButton.events.onInputDown.add(function(){this.moveRight=true;}, this);
+        this.rightButton.events.onInputUp.add(function(){this.moveRight=false;}, this);
+        this.rightButton.alpha = 0.5;
+        //}
     },
 };
 

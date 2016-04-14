@@ -12,8 +12,8 @@ var level1 = {
 
         game.load.image('fire', 'assets/fire.png');
         game.load.image("jump","assets/jump.png");
-        game.load.image('right', 'assets/right.png');
-        game.load.image('left', 'assets/left.png');
+        game.load.image('bottonright', 'assets/right.png');
+        game.load.image('bottonleft', 'assets/left.png');
 
         game.load.image('bullet', 'assets/shoot.png');
         game.load.image("enemy","assets/asteroid2.png");
@@ -107,13 +107,13 @@ var level1 = {
         this.game.physics.arcade.overlap(this.bullets, this.enemy, this.deadEnemy, null, this);
         //  Reset the players velocity (movement)
         this.player.body.velocity.x = 0;
-        if (this.cursors.left.isDown)
+        if (this.cursors.left.isDown || this.moveLeft)
         {
             //  Move to the left
             this.player.body.velocity.x = -150;
             this.player.animations.play('left');
         }
-        else if (this.cursors.right.isDown)
+        else if (this.cursors.right.isDown || this.moveRight)
         {
             //  Move to the right
             this.player.body.velocity.x = 150;
@@ -133,7 +133,7 @@ var level1 = {
 
         }
         //Shoot a player weapon
-        if (game.input.activePointer.isDown)
+        if (game.input.activePointer.isDown && game.input.activePointer.y < 250)
         {
             this.fire();
         }
@@ -416,14 +416,14 @@ var level1 = {
 
     selectMobileControls: function(g) {
         //Detect mobile device
-        if (!game.device.desktop){
-            this.jumpButton = game.add.sprite(430, 250, 'jump');
+        //if (!game.device.desktop){
+            this.jumpButton = game.add.sprite(800, 255, 'jump');
             this.jumpButton.fixedToCamera = true;
             this.jumpButton.inputEnabled = true;
             this.jumpButton.events.onInputDown.add(this.jump, this);
             this.jumpButton.alpha = 0.5;
 
-            this.shootButton = game.add.sprite(730, 250, 'fire');
+            this.shootButton = game.add.sprite(900, 255, 'fire');
             this.shootButton.fixedToCamera = true;
             this.shootButton.inputEnabled = true;
             this.shootButton.events.onInputDown.add(this.fire, this);
@@ -432,7 +432,7 @@ var level1 = {
             this.moveLeft = false;
             this.moveRight = false;
 
-            this.leftButton = game.add.sprite(10, 250, 'left');
+            this.leftButton = game.add.sprite(10, 255, 'bottonleft');
             this.leftButton.fixedToCamera = true;
             this.leftButton.inputEnabled = true;
             this.leftButton.events.onInputOver.add(function(){this.moveLeft=true;}, this);
@@ -441,7 +441,7 @@ var level1 = {
             this.leftButton.events.onInputUp.add(function(){this.moveLeft=false;}, this);
             this.leftButton.alpha = 0.5;
 
-            this.rightButton = game.add.sprite(110, 250, 'right');
+            this.rightButton = game.add.sprite(110, 255, 'bottonright');
             this.rightButton.fixedToCamera = true;
             this.rightButton.inputEnabled = true;
             this.rightButton.events.onInputOver.add(function(){this.moveRight=true;}, this);
@@ -449,6 +449,6 @@ var level1 = {
             this.rightButton.events.onInputDown.add(function(){this.moveRight=true;}, this);
             this.rightButton.events.onInputUp.add(function(){this.moveRight=false;}, this);
             this.rightButton.alpha = 0.5;
-        }
+        //}
     },
 };
