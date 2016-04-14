@@ -37,6 +37,7 @@
             game.load.image('bullet', 'assets/shoot.png');
             game.load.image("enemy","assets/asteroid2.png");
             game.load.image('rain', 'assets/blue_ball.png');
+            game.load.image('blood', 'assets/ball-tlb.png');
 
             this.game.load.tilemap('tilemap', 'assets/forest.json', null, Phaser.Tilemap.TILED_JSON);
             this.game.load.image('Forest', 'assets/FreeTileset/png/BG/BG.png');
@@ -49,7 +50,9 @@
             this.game.load.audio('dust', ['assets/dust.wav', 'assets/dust.mp3']);
             this.game.load.audio('jump', ['assets/jump.wav', 'assets/jump.mp3']);
             this.game.load.audio('coin', ['assets/coin.wav', 'assets/coin.mp3']);
+            this.game.load.audio('laser', ['assets/laser.mp3']);
             this.game.load.audio('music', ['assets/musicgame.mp3']);
+            this.game.load.audio('rain', ['assets/rain.mp3']);
 
             this.player;
             this.enemy;
@@ -189,10 +192,13 @@
             //this.game.sound.mute = true;
             this.music = this.game.add.audio('music', 0.5);
             this.music.play();
+            this.rain = this.game.add.audio('rain', 1);
+            this.rain.play();
             this.deadSound = this.game.add.audio('dead', 0.1);
             this.jumpSound = this.game.add.audio('jump', 0.1);
             this.dustSound = this.game.add.audio('dust', 0.1);
             this.coinSound = this.game.add.audio('coin', 0.1);
+            this.laser = this.game.add.audio('laser', 0.1);
         },
 
         addPlayer: function(){
@@ -276,10 +282,9 @@
         },
 
         deadPlayer: function (){
-
-//            this.exp.x = this.player.x;
-//            this.exp.y = this.player.y+10;
-//            this.exp.start(true, 500, null, 20);
+//            this.blood.x = this.player.x;
+//            this.blood.y = this.player.y + 10;
+//            this.blood.blood(true, 500, null, 20);
 //            this.shakeEffect(this.enemy);
             this.deadSound.play();
             this.lives--;
@@ -341,43 +346,14 @@
             if (parseInt(this.enemy2.body.x) < 1770 ) { this.enemy2.body.velocity.x = 80; }
         },
 
-        addExplosion: function(){
-            /* Crea conjunt d'explosions  */
-            this.explosions = game.add.group();
-            this.explosions.createMultiple(12, 'explosio');
-            this.explosions.setAll('anchor.x', 0.5);
-            this.explosions.setAll('anchor.y', 0.5);
-            this.explosions.forEach(function () {
-                //this.explosions.animations.add('explosio');
-            }, this);
-        },
-
-        updateExplosion: function(){
-            /*  Revisa les colisions entre el grup de bales i el grup d'asteroides*/
-            game.physics.arcade.overlap(this.bullets, this.emitter, function () {
-                /*  Amaga la bala i l'asteroide*/
-                this.bullet.kill();
-                this.emitter.kill();
-                /*  Crea una explosió*/
-                this.explosio = this.explosions.getFirstExists(false);
-                this.reset(this.emitter.body.x, this.emitter.body.y);
-                this.play('explosio', 30, false, true);
-                this.kill;
-                /*  Suma punts*/
-                //this.punts += 10;
-            }, null, this);
-        },
-
         fire: function(){
             if (game.time.now > this.nextFire && this.bullets.countDead() > 0)
             {
                 this.nextFire = game.time.now + this.fireRate;
-
                 this.bullet = this.bullets.getFirstDead();
-
                 this.bullet.reset(this.player.x + 10, this.player.y + 30 );
-
                 game.physics.arcade.moveToPointer(this.bullet, 300);
+                this.laser.play();
             }
         },
 
@@ -404,6 +380,7 @@
             explosion.anchor.x = 0.5;
             explosion.anchor.y = 0.5;
             explosion.animations.add('explosio');
+            this.dustSound.play();
         }
 
     };
