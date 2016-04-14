@@ -107,7 +107,7 @@
             this.addEnemy();
 
             //Add blood particles
-//            this.createParticles();
+            this.createParticles();
 
             //  The score
             this.scoreText = this.game.add.text(16, 16, 'score: 0', { fontSize: '32px', fill: '#000' });
@@ -285,9 +285,9 @@
         },
 
         deadPlayer: function (){
-//            this.blood.x = this.player.x;
-//            this.blood.y = this.player.y + 10;
-//            this.blood(true, 500, null, 20);
+            this.exp.x = this.player.x;
+            this.exp.y = this.player.y + 10;
+            this.exp.start(true, 500, null, 20);
             this.shakeEffect(this.enemy);
             this.deadSound.play();
             this.lives--;
@@ -386,14 +386,16 @@
             this.dustSound.play();
         },
 
-//        createParticles: function() {
-//            this.blood = game.add.emitter(0, 0, 15);
-//            this.blood.makeParticles('blood');
-//            this.blood.setYSpeed(-150, 150);
-//            this.blood.setXSpeed(-350, 250);
-//            this.blood.gravity = 150;
-//        },
-//
+        createParticles: function() {
+            this.exp = game.add.emitter(0, 0, 15);
+            this.exp.makeParticles('blood');
+            this.exp.minParticleScale = 0.1;
+            this.exp.maxParticleScale = 0.2;
+            this.exp.setYSpeed(-150, 150);
+            this.exp.setXSpeed(-350, 350);
+            this.exp.gravity = 150;
+        },
+
         shakeEffect: function(g) {
             var move = 100;
             var time = 500;
