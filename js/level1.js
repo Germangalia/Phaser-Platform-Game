@@ -8,7 +8,12 @@ var level1 = {
 
         game.load.spritesheet('explosio', 'assets/explosion.png', 128, 128);
 
-        this.game.load.image('live', 'assets/diamond.png');
+        this.game.load.image('live', 'assets/hearth.png');
+
+        game.load.image('fire', 'assets/fire.png');
+        game.load.image("jump","assets/jump.png");
+        game.load.image('right', 'assets/right.png');
+        game.load.image('left', 'assets/left.png');
 
         game.load.image('bullet', 'assets/shoot.png');
         game.load.image("enemy","assets/asteroid2.png");
@@ -409,13 +414,13 @@ var level1 = {
     selectMobileControls: function(g) {
         //Detect mobile device
         if (!game.device.desktop){
-            this.jumpButton = game.add.sprite(430, 130, 'jump');
+            this.jumpButton = game.add.sprite(430, 250, 'jump');
             this.jumpButton.fixedToCamera = true;
             this.jumpButton.inputEnabled = true;
             this.jumpButton.events.onInputDown.add(this.jump, this);
             this.jumpButton.alpha = 0.5;
 
-            this.shootButton = game.add.sprite(730, 130, 'bullet');
+            this.shootButton = game.add.sprite(730, 250, 'fire');
             this.shootButton.fixedToCamera = true;
             this.shootButton.inputEnabled = true;
             this.shootButton.events.onInputDown.add(this.fire, this);
@@ -424,7 +429,7 @@ var level1 = {
             this.moveLeft = false;
             this.moveRight = false;
 
-            this.leftButton = game.add.sprite(10, 130, 'left');
+            this.leftButton = game.add.sprite(10, 250, 'left');
             this.leftButton.fixedToCamera = true;
             this.leftButton.inputEnabled = true;
             this.leftButton.events.onInputOver.add(function(){this.moveLeft=true;}, this);
@@ -433,7 +438,7 @@ var level1 = {
             this.leftButton.events.onInputUp.add(function(){this.moveLeft=false;}, this);
             this.leftButton.alpha = 0.5;
 
-            this.rightButton = game.add.sprite(110, 130, 'right');
+            this.rightButton = game.add.sprite(110, 250, 'right');
             this.rightButton.fixedToCamera = true;
             this.rightButton.inputEnabled = true;
             this.rightButton.events.onInputOver.add(function(){this.moveRight=true;}, this);

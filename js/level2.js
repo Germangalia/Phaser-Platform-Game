@@ -8,7 +8,12 @@ var level2 = {
 
         game.load.spritesheet('explosio', 'assets/explosion.png', 128, 128);
 
-        this.game.load.image('live', 'assets/diamond.png');
+        this.game.load.image('live', 'assets/hearth.png');
+
+        game.load.image('fire', 'assets/fire.png');
+        game.load.image("jump","assets/jump.png");
+        game.load.image('right', 'assets/right.png');
+        game.load.image('left', 'assets/left.png');
 
         game.load.image('bullet', 'assets/shoot.png');
         game.load.image("enemy","assets/asteroid2.png");
@@ -430,7 +435,7 @@ var level2 = {
             this.jumpButton.events.onInputDown.add(this.jump, this);
             this.jumpButton.alpha = 0.5;
 
-            this.shootButton = game.add.sprite(730, 130, 'bullet');
+            this.shootButton = game.add.sprite(730, 130, 'fire');
             this.shootButton.fixedToCamera = true;
             this.shootButton.inputEnabled = true;
             this.shootButton.events.onInputDown.add(this.fire, this);
