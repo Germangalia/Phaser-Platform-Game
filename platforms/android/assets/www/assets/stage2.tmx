@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="20" height="20" tilewidth="32" tileheight="32">
+ <tileset firstgid="1" name="sky" tilewidth="32" tileheight="32">
+  <image source="sky.png" width="800" height="600"/>
+ </tileset>
+ <tileset firstgid="451" name="Crate" tilewidth="32" tileheight="32">
+  <image source="../../FreeTileset/png/Object/Crate.png" width="77" height="77"/>
+ </tileset>
+ <tileset firstgid="455" name="2" tilewidth="32" tileheight="32">
+  <image source="../../FreeTileset/png/Tiles/2.png" width="128" height="128"/>
+ </tileset>
+ <tileset firstgid="471" name="15" tilewidth="32" tileheight="32">
+  <image source="../../FreeTileset/png/Tiles/15.png" width="128" height="93"/>
+ </tileset>
+ <tileset firstgid="479" name="13" tilewidth="32" tileheight="32">
+  <image source="../../FreeTileset/png/Tiles/13.png" width="128" height="93"/>
+ </tileset>
+ <layer name="Background" width="20" height="20">
+  <data encoding="base64" compression="zlib">
+   eJzNzclaDQAYx+GTMZdgLpdQ0mRqLTQR1lKd04S1kgaUtUKnwbBCURrRJYjGS0hILsF7Ay0+K8/zvZvf4v8VJBKJQooo5iSnOM0ZzlISaOVUUEkVl7hMNVe4yrVAS5KigUaaaKaFm9zidqB10EkX3dznAQ/poZdHgTZAmkGGGGaE57zgJa8CbZIppplhljk+8onPzAfaFxb4yjcWWWKZFVZZC7R1vrPBD37yi01+s8WfQEtkOHawk13sZg97yWRfoO3nAAc5xGGOcJQssjkWaDnkcpw8TpBPAYUUURxo5yjlPBe4SBnlVFBJVaBdp4Yb1FJHPUlSNNAYaHdopY27tHOPDjrpojvQHtNHP094yjMGSDPIUKCN8Y73jDPBByaZYpqZQHvNG94yGtjfrm+3969//ve9v7G6z8k=
+  </data>
+ </layer>
+ <layer name="Body" width="20" height="20">
+  <data encoding="base64" compression="zlib">
+   eJzt0bcNgEAQRNG9/gvD+8NbCQrhJzTALRE30gsm2ElW5H/ZjciBHgNGTOb93snthRkLVmwOez7fxv/f50nAn0JEiI17T5AiQ67QC5SoUCv0BhYtOoV+A93rVaU=
+  </data>
+ </layer>
+</map>
