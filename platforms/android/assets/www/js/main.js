@@ -1,4 +1,4 @@
-var game = new Phaser.Game(1000, 320, Phaser.AUTO, '');
+var game = new Phaser.Gamevar game = new Phaser.Game(window.innerWidth * window.devicePixelRatio, window.innerHeight * window.devicePixelRatio, Phaser.CANVAS, '');
 
 this.game.state.add('startMenu', startMenu);
 this.game.state.add('level1', level1);

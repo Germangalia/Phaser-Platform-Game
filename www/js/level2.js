@@ -64,6 +64,10 @@ var level2 = {
         //Added physics
         this.game.physics.startSystem(Phaser.Physics.ARCADE);
 
+        // Maintain aspect ratio
+        this.game.scale.fullScreenScaleMode = Phaser.ScaleManager.EXACT_FIT;
+        //this.game.scale.stopFullScreen();
+
         //Add map
         this.addMap();
 
@@ -484,5 +488,15 @@ var level2 = {
         this.rightButton.alpha = 0.5;
         //}
     },
+
+    gofull: function() {
+
+        if (game.scale.isFullScreen) {
+            game.scale.stopFullScreen();
+        }
+        else {
+            game.scale.startFullScreen(false);
+        }
+    }
 };
 
