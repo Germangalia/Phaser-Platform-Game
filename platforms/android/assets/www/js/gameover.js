@@ -13,11 +13,25 @@ var gameOver = {
         // Create button to restart
         this.add.button(360, 150, 'restart', this.startGame, this);
 
+        // Maintain aspect ratio
+        this.game.scale.fullScreenScaleMode = Phaser.ScaleManager.EXACT_FIT;
+        //this.game.scale.stopFullScreen();
+
     },
 
     startGame: function () {
         // Restat.
         this.state.start('level1');
+    },
+
+    gofull: function() {
+
+        if (game.scale.isFullScreen) {
+            game.scale.stopFullScreen();
+        }
+        else {
+            game.scale.startFullScreen(false);
+        }
     }
 
 };

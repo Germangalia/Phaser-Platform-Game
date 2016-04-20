@@ -64,12 +64,16 @@ var level2 = {
         //Added physics
         this.game.physics.startSystem(Phaser.Physics.ARCADE);
 
-        // Maintain aspect ratio
-        this.game.scale.fullScreenScaleMode = Phaser.ScaleManager.EXACT_FIT;
-        //this.game.scale.stopFullScreen();
 
         //Add map
         this.addMap();
+
+        //Scale
+        this.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
+        this.scale.pageAlignHorizontally = true;
+        //this.scale.pageAlignVertically = true;
+        this.scale.updateLayout();
+
 
         //Add sound
         this.addSound();
