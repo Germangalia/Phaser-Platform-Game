@@ -107,6 +107,10 @@ var level2 = {
 
         //  Our controls.
         this.cursors = this.game.input.keyboard.createCursorKeys();
+
+        //Detected device
+        if (!game.device.desktop)
+            this.selectMobileControls();
     },
 
     update: function() {
@@ -170,9 +174,6 @@ var level2 = {
 
         //Move enemys
         this.enemyMove();
-
-        //Mobile controls
-        this.selectMobileControls();
 
 
         this.inputs();
@@ -457,7 +458,7 @@ var level2 = {
 
     selectMobileControls: function(g) {
         //Detect mobile device
-        //if (!game.device.desktop){
+        if (!game.device.desktop){
         this.jumpButton = game.add.sprite(800, 255, 'jump');
         this.jumpButton.fixedToCamera = true;
         this.jumpButton.inputEnabled = true;
@@ -490,7 +491,7 @@ var level2 = {
         this.rightButton.events.onInputDown.add(function(){this.moveRight=true;}, this);
         this.rightButton.events.onInputUp.add(function(){this.moveRight=false;}, this);
         this.rightButton.alpha = 0.5;
-        //}
+        }
     },
 
     gofull: function() {

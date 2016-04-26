@@ -60,12 +60,15 @@ var level1 = {
         //Added physics
         this.game.physics.startSystem(Phaser.Physics.ARCADE);
 
-        // Maintain aspect ratio
-        this.game.scale.fullScreenScaleMode = Phaser.ScaleManager.EXACT_FIT;
-        //this.game.scale.stopFullScreen();
-
         //Add map
         this.addMap();
+
+        //Scale
+        this.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
+        this.scale.pageAlignHorizontally = true;
+        //this.scale.pageAlignVertically = true;
+        this.scale.updateLayout();
+
 
         //Add sound
         this.addSound();
@@ -99,6 +102,10 @@ var level1 = {
 
         //  Our controls.
         this.cursors = this.game.input.keyboard.createCursorKeys();
+
+        //Detected device
+        if (!game.device.desktop)
+            this.addMobileInputs();
     },
 
     update: function() {
@@ -421,7 +428,7 @@ var level1 = {
 
     selectMobileControls: function(g) {
         //Detect mobile device
-        //if (!game.device.desktop){
+        if (!game.device.desktop){
             this.jumpButton = game.add.sprite(800, 255, 'jump');
             this.jumpButton.fixedToCamera = true;
             this.jumpButton.inputEnabled = true;
@@ -454,7 +461,7 @@ var level1 = {
             this.rightButton.events.onInputDown.add(function(){this.moveRight=true;}, this);
             this.rightButton.events.onInputUp.add(function(){this.moveRight=false;}, this);
             this.rightButton.alpha = 0.5;
-        //}
+        }
     },
 
     gofull: function() {
